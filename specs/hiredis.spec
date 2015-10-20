@@ -18,6 +18,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  gcc
 BuildRequires:  make
 
+%define MINOR %(echo %{version} | sed -e 's/\.[0-9]*$//')
+%define MAJOR %(echo %{version} | sed -e 's/\.[0-9]*\.[0-9]*$//')
+
 %description
 Hiredis is a minimalistic C client library for the Redis database.
 
@@ -33,11 +36,12 @@ libraries to develop applications using a Redis database.
 %setup -q
 
 %build
-make %{?_smp_mflags}
+make %{?_smp_mflags} LDFLAGS="%{?__global_ldflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT PREFIX=/ INCLUDE_PATH=%{_includedir}/%{name} LIBRARY_PATH=%{_libdir}
+ln -sf libhiredis.so.%{MINOR} $RPM_BUILD_ROOT%{_libdir}/libhiredis.so.%{MAJOR}
 rm $RPM_BUILD_ROOT%{_includedir}/%{name}/adapters/glib.h
 rm $RPM_BUILD_ROOT%{_includedir}/%{name}/adapters/ivykis.h
 rm $RPM_BUILD_ROOT%{_includedir}/%{name}/adapters/libuv.h
@@ -52,9 +56,9 @@ install -m 0644 -D README.md $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/README
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%define MINOR %(echo %{version} | sed -e 's/\.[0-9]*$//')
 %defattr(-,root,root,-)
 %{_libdir}/libhiredis.so.%{MINOR}
+%{_libdir}/libhiredis.so.%{MAJOR}
 %{_libdir}/libhiredis.so
 %{_docdir}/%{name}-%{version}/COPYING
 
