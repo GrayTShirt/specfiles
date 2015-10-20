@@ -171,7 +171,7 @@ fi
 Summary:        Monitoring System RRD Subscriber
 Group:          Applications/System
 
-%description subscribers
+%description rrd
 bolo is a lightweight and scalable monitoring system that can
 track samples, counters, states and configuration data.
 
