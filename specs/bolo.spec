@@ -135,7 +135,7 @@ fi
 Summary:        Monitoring System Redis Subscriber
 Group:          Applications/System
 
-%description subscribers
+%description redis
 bolo is a lightweight and scalable monitoring system that can
 track samples, counters, states and configuration data.
 
