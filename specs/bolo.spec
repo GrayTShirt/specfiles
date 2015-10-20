@@ -244,7 +244,7 @@ fi
 Summary:        Monitoring System Meta Subscriber
 Group:          Applications/System
 
-%description subscribers
+%description meta
 bolo is a lightweight and scalable monitoring system that can
 track samples, counters, states and configuration data.
 
