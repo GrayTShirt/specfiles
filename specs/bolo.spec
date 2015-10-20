@@ -153,13 +153,13 @@ if [ $1 == 0 ]; then # erase!
 fi
 
 
-%postun subscribers
+%postun redis
 if [ $1 == 0 ]; then # upgrade!
 	/sbin/service condrestart bolo2redis
 fi
 
 
-%files subscribers
+%files redis
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2redis
 %{_initrddir}/bolo2redis
