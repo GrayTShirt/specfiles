@@ -29,6 +29,26 @@ The design choices emphasize security, and "magic constants" have clear rational
 And despite the emphasis on high security, primitives are faster across-the-board
 than most implementations of the NIST standards.
 
+%package devel
+Summary:  A modern and easy-to-use crypto library - Development Files
+Group:    Development/Libraries
+
+%description devel
+Sodium is a modern, easy-to-use software library for encryption, decryption,
+signatures, password hashing and more. It is a portable, cross-compilable,
+installable, packageable fork of NaCl, with a compatible API, and an extended
+API to improve usability even further.
+
+Its goal is to provide all of the core operations needed to build higher-level
+cryptographic tools. Sodium supports a variety of compilers and operating systems,
+including Windows (with MinGW or Visual Studio, x86 and x86_64), iOS and Android.
+
+The design choices emphasize security, and "magic constants" have clear rationales.
+And despite the emphasis on high security, primitives are faster across-the-board
+than most implementations of the NIST standards.
+
+This package contains the header files for developing code agains libsodium
+
 
 %prep
 %setup -q
@@ -50,3 +70,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
+%{_libdir}/libsodium.so
+%{_libdir}/libsodium.so.18
+%{_libdir}/libsodium.so.18.0.1
+
+%files devel
+%defattr(-,root,root,-)
+%{_includedir}/*
+%{_libdir}/libsodium.a
+%{_libdir}/libsodium.la
+%{_libdir}/pkgconfig/libsodium.pc
