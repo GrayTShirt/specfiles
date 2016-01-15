@@ -14,6 +14,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 # BuildRequires:  openpgm-devel
 BuildRequires:  libuuid-devel
 BuildRequires:  libsodium-devel
+BuildRequires:  gcc-c++
 
 
 %description
