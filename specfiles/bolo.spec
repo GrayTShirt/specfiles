@@ -16,6 +16,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  gcc
+BuildRequires:  libtool
 BuildRequires:  libctap-devel
 BuildRequires:  pcre-devel
 BuildRequires:  zeromq-devel

@@ -7,6 +7,7 @@ License:        ASL 2.0
 URL:            https://github.com/google/google-authenticator
 Source0:        %{name}-%{version}.tar.gz
 BuildRequires:  pam-devel
+BuildRequires:  libtool
 
 
 %description
