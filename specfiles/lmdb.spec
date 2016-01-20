@@ -44,16 +44,24 @@ This package contains the header files for developing against lmdb
 
 
 %prep
-%setup -q
+%setup -q -n lmdb-LMDB_%{version}
+cd libraries/liblmdb
+TMPLIBDIR=$(echo %{_libdir} | sed -e "s:/:\\\/:g")
+sed -i \
+	-e "s/^\(prefix[\ \t]*=[\ \t]*\/usr\)\/local/\1/" \
+	-e "s/^\(mandir[\ \s]*=[\ \s]*\\\$(prefix)\)/\1\/share/" \
+	-e "s/\(\\\$(DESTDIR)\)\\\$(prefix)\/man/\1\/\\\$(mandir)/" \
+	-e "s/\(\\\$(DESTDIR)\)\\\$(prefix)\/lib/\1$TMPLIBDIR/" Makefile
 
 
 %build
-%configure
+cd libraries/liblmdb
 make %{?_smp_mflags}
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd libraries/liblmdb
 make install DESTDIR=$RPM_BUILD_ROOT
 
 
@@ -63,15 +71,21 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{_libdir}/libvigor.so
-%{_libdir}/libvigor.so.1
-%{_libdir}/libvigor.so.1.0.0
+%{_libdir}/liblmdb.so
+%{_bindir}/mdb_copy
+%{_bindir}/mdb_copy
+%{_bindir}/mdb_dump
+%{_bindir}/mdb_load
+%{_bindir}/mdb_stat
+%{_mandir}/man1/mdb_copy.1.gz
+%{_mandir}/man1/mdb_dump.1.gz
+%{_mandir}/man1/mdb_load.1.gz
+%{_mandir}/man1/mdb_stat.1.gz
 
 %files devel
 %defattr(-,root,root,-)
-%{_includedir}/vigor.h
-%{_libdir}/libvigor.a
-%{_libdir}/libvigor.la
+%{_includedir}/lmdb.h
+%{_libdir}/liblmdb.a
 
 
 %changelog
