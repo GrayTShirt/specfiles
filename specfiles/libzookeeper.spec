@@ -40,6 +40,7 @@ cd src/c
 make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_bindir}/load_gen
 
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
