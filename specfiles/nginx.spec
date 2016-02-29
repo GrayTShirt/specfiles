@@ -30,11 +30,10 @@ Requires(preun):    chkconfig
 Requires(preun):    initscripts
 Requires(postun):   initscripts
 
-Source0:    %{name}-%{version}.tar.gz
+Source0:    http://%{name}.org/download/%{name}-%{version}.tar.gz
             # https://github.com/wandenburg/nginx-push-stream-module
 Source1:    %{name}-push-stream-module-%{_push_stream_version}.tar.gz
-            # https://github.com/GrayTShirt/specfiles
-Source2:    %{name}.initd.tar.gz
+Source2:    https://github.com/GrayTShirt/specfiles/raw/master/extras/%{name}.initd.tar.gz
 
 
 %description
