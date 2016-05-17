@@ -1,6 +1,10 @@
 Name:           libvigor
 Version:        1.2.7
+%if %{?_release:1}0
+Release:        %{_release}%{?dist}
+%else
 Release:        1%{?dist}
+%endif
 Summary:        Missing Bits of C
 
 Group:          System Environment/Libraries
