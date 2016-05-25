@@ -1,9 +1,9 @@
 %define _user                   nginx
 %define _cache_dir            %{_localstatedir}/cache/nginx
-%define _push_stream_version    0.5.1
+%define _push_stream_version    0.5.2
 
 Name:           nginx
-Version:        1.9.12
+Version:        1.11.0
 Release:        1%{?dist}
 Summary:        High performance web server
 Group:          System Environment/Daemons
