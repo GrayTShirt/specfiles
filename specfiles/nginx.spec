@@ -3,7 +3,7 @@
 %define _push_stream_version    0.5.2
 
 Name:           nginx
-Version:        1.11.0
+Version:        1.11.1
 Release:        1%{?dist}
 Summary:        High performance web server
 Group:          System Environment/Daemons
@@ -106,8 +106,8 @@ rm -rf %{buildroot}
 
 
 %pre
-%{_bindir}/getent group  %{_user} || %{_sbindir}/groupadd -r %{_user}
-%{_bindir}/getent passwd %{_user} || %{_sbindir}/useradd  -r -d %{_datadir}/%{name} -s /sbin/nologin %{_user}
+getent group  %{_user} || groupadd -r %{_user}
+getent passwd %{_user} || useradd  -r -g %{_user} -c 'nginx daemon' -d %{_datadir}/%{name} -s /sbin/nologin %{_user}
 
 
 %post
