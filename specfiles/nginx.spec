@@ -3,7 +3,7 @@
 %define _push_stream_version    0.5.2
 
 Name:           nginx
-Version:        1.11.1
+Version:        1.11.3
 Release:        1%{?dist}
 Summary:        High performance web server
 Group:          System Environment/Daemons
