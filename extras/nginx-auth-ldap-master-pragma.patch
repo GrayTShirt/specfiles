@@ -1,0 +1,25 @@
+--- nginx-auth-ldap-master/ngx_http_auth_ldap_module.c.old	2016-10-28 15:05:10.008702000 -0400
++++ nginx-auth-ldap-master/ngx_http_auth_ldap_module.c	2016-10-28 15:10:04.002293000 -0400
+@@ -35,14 +35,6 @@
+ // used for manual warnings
+ #define XSTR(x) STR(x)
+ #define STR(x) #x
+-// make sure manual warnings don't get escalated to errors
+-#ifdef __clang__
+-#pragma clang diagnostic warning "-W#warnings"
+-#else
+-#ifdef __GNUC__
+-#pragma GCC diagnostic warning "-Wcpp"
+-#endif
+-#endif
+ // TODO: do the same stuff for MSVC and/or other compilers
+ 
+ 
+@@ -401,7 +393,6 @@
+       #if OPENSSL_VERSION_NUMBER >= 0x10002000
+       server->ssl_check_cert = 1;
+       #else
+-      #warning "http_auth_ldap: Compiling with OpenSSL < 1.0.2, certificate verification will be unavailable. OPENSSL_VERSION_NUMBER == " XSTR(OPENSSL_VERSION_NUMBER)
+       ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
+         "http_auth_ldap: 'ssl_cert_check': cannot verify remote certificate's domain name because "
+         "your version of OpenSSL is too old. "

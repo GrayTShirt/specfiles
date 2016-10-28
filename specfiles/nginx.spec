@@ -3,7 +3,7 @@
 %define _push_stream_version    0.5.2
 
 Name:           nginx
-Version:        1.11.3
+Version:        1.11.5
 Release:        1%{?dist}
 Summary:        High performance web server
 Group:          System Environment/Daemons
@@ -15,11 +15,13 @@ BuildRoot:          %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:      gcc
 BuildRequires:      pcre-devel
 BuildRequires:      zlib-devel
+BuildRequires:      openldap-devel
 BuildRequires:      openssl-devel
 BuildRequires:      perl(ExtUtils::Embed)
 
 Requires:           pcre
 Requires:           zlib
+Requires:           openldap
 Requires:           openssl
 Requires:           perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
@@ -34,6 +36,10 @@ Source0:    http://%{name}.org/download/%{name}-%{version}.tar.gz
             # https://github.com/wandenburg/nginx-push-stream-module
 Source1:    %{name}-push-stream-module-%{_push_stream_version}.tar.gz
 Source2:    https://github.com/GrayTShirt/specfiles/raw/master/extras/%{name}.initd.tar.gz
+            # https://github.com/kvspb/nginx-auth-ldap
+            # curl https://codeload.github.com/kvspb/nginx-auth-ldap/tar.gz/master  -o ~/rpmbuild/SOURCES/nginx-auth-ldap-master.tar.gz
+Source3:    %{name}-auth-ldap-master.tar.gz
+Patch0:     %{name}-auth-ldap-master-pragma.patch
 
 
 %description
@@ -47,6 +53,8 @@ One third party module, ngx_http_push_stream has been added.
 %setup -q
 %setup -T -D -a 1
 %setup -T -D -a 2
+%setup -T -D -a 3
+%patch0 -p0
 
 
 %build
@@ -84,7 +92,8 @@ One third party module, ngx_http_push_stream has been added.
 	--with-http_stub_status_module \
 	--with-http_auth_request_module \
 	--with-cc-opt='-O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic' \
-	--add-module=%{_builddir}/nginx-%{version}/nginx-push-stream-module-%{_push_stream_version}
+	--add-module=%{_builddir}/nginx-%{version}/nginx-push-stream-module-%{_push_stream_version} \
+	--add-module=%{_builddir}/nginx-%{version}/nginx-auth-ldap-master
 make %{?_smp_mflags}
 
 
