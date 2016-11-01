@@ -69,7 +69,7 @@ One third party module, ngx_http_push_stream has been added.
 	--http-log-path=/var/log/nginx/access.log \
 	--pid-path=/var/run/nginx.pid \
 	--lock-path=/var/run/nginx.lock \
-	--modules-path=%{_libdir}/%{name}/modules \
+	--modules-path=%{_datadir}/%{name}/modules \
 	--http-client-body-temp-path=%{_cache_dir}/client_temp \
 	--http-proxy-temp-path=%{_cache_dir}/proxy_temp \
 	--http-fastcgi-temp-path=%{_cache_dir}/fastcgi_temp \
@@ -194,7 +194,7 @@ Dynamic Nginx Perl module
 %{perl_vendorarch}/%{name}.pm
 %{perl_vendorarch}/auto/%{name}/%{name}.so
 
-%{_libdir}/%{name}/modules/ngx_http_perl_module.so
+%{_datadir}/%{name}/modules/ngx_http_perl_module.so
 
 %doc %{_mandir}/man3/%{name}.3pm.gz
 
@@ -208,7 +208,7 @@ Dynamic Nginx ldap module
 
 %files        module-auth_ldap
 %defattr(-,root,root,-)
-%{_libdir}/%{name}/modules/ngx_http_auth_ldap_module.so
+%{_datadir}/%{name}/modules/ngx_http_auth_ldap_module.so
 
 
 %package      module-geoip
@@ -220,7 +220,7 @@ Dynamic Nginx GeoIP module
 
 %files        module-geoip
 %defattr(-,root,root,-)
-%{_libdir}/%{name}/modules/ngx_http_geoip_module.so
+%{_datadir}/%{name}/modules/ngx_http_geoip_module.so
 
 
 %package      module-image_filter
@@ -232,7 +232,7 @@ Dynamic Nginx image filter module
 
 %files        module-image_filter
 %defattr(-,root,root,-)
-%{_libdir}/%{name}/modules/ngx_http_image_filter_module.so
+%{_datadir}/%{name}/modules/ngx_http_image_filter_module.so
 
 
 %package      module-push_stream
@@ -244,7 +244,7 @@ Wandenburg's Dynamic Nginx Push Stream module
 
 %files        module-push_stream
 %defattr(-,root,root,-)
-%{_libdir}/%{name}/modules/ngx_http_push_stream_module.so
+%{_datadir}/%{name}/modules/ngx_http_push_stream_module.so
 
 
 %package      module-xslt
@@ -256,7 +256,7 @@ Dynamic Nginx XSLT module
 
 %files        module-xslt
 %defattr(-,root,root,-)
-%{_libdir}/%{name}/modules/ngx_http_xslt_filter_module.so
+%{_datadir}/%{name}/modules/ngx_http_xslt_filter_module.so
 
 
 %package      module-mail
@@ -268,7 +268,7 @@ Dynamic Nginx email module
 
 %files        module-mail
 %defattr(-,root,root,-)
-%{_libdir}/%{name}/modules/ngx_mail_module.so
+%{_datadir}/%{name}/modules/ngx_mail_module.so
 
 
 %package      module-stream
@@ -280,7 +280,7 @@ Dynamic Nginx Streaming module
 
 %files        module-stream
 %defattr(-,root,root,-)
-%{_libdir}/%{name}/modules/ngx_stream_module.so
+%{_datadir}/%{name}/modules/ngx_stream_module.so
 
 
 %package      module-stream_geoip
@@ -292,7 +292,7 @@ Dynamic Nginx Geo-Streaming module
 
 %files        module-stream_geoip
 %defattr(-,root,root,-)
-%{_libdir}/%{name}/modules/ngx_stream_geoip_module.so
+%{_datadir}/%{name}/modules/ngx_stream_geoip_module.so
 
 
 %changelog
