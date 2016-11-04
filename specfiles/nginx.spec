@@ -199,14 +199,14 @@ Dynamic Nginx Perl module
 %doc %{_mandir}/man3/%{name}.3pm.gz
 
 
-%package      module-auth_ldap
+%package      module-auth-ldap
 Summary:      Dynamic Nginx ldap module
 Group:        System Environment/Daemons
 
-%description  module-auth_ldap
+%description  module-auth-ldap
 Dynamic Nginx ldap module
 
-%files        module-auth_ldap
+%files        module-auth-ldap
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_http_auth_ldap_module.so
 
@@ -223,26 +223,26 @@ Dynamic Nginx GeoIP module
 %{_datadir}/%{name}/modules/ngx_http_geoip_module.so
 
 
-%package      module-image_filter
+%package      module-image-filter
 Summary:      Dynamic Nginx image filter module
 Group:        System Environment/Daemons
 
-%description  module-image_filter
+%description  module-image-filter
 Dynamic Nginx image filter module
 
-%files        module-image_filter
+%files        module-image-filter
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_http_image_filter_module.so
 
 
-%package      module-push_stream
+%package      module-push-stream
 Summary:      Dynamic Nginx Push Stream module
 Group:        System Environment/Daemons
 
-%description  module-push_stream
+%description  module-push-stream
 Wandenburg's Dynamic Nginx Push Stream module
 
-%files        module-push_stream
+%files        module-push-stream
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_http_push_stream_module.so
 
@@ -283,14 +283,14 @@ Dynamic Nginx Streaming module
 %{_datadir}/%{name}/modules/ngx_stream_module.so
 
 
-%package      module-stream_geoip
+%package      module-stream-geoip
 Summary:      Dynamic Nginx Geo-Streaming nmodule
 Group:        System Environment/Daemons
 
-%description  module-stream_geoip
+%description  module-stream-geoip
 Dynamic Nginx Geo-Streaming module
 
-%files        module-stream_geoip
+%files        module-stream-geoip
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_stream_geoip_module.so
 
