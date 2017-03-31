@@ -1,12 +1,14 @@
 %define _user                   nginx
 %define _cache_dir            %{_localstatedir}/cache/nginx
 %define _push_stream_version    0.5.2
+%define _vts_version            0.1.14
 
 Name:           nginx
-Version:        1.11.5
+Version:        1.11.12
 Release:        1%{?dist}
 Summary:        High performance web server
 Group:          System Environment/Daemons
+Vendor:         Dan Molik <dan@danmolik.com>
 License:        2-clause BSD-like license
 URL:            http://nginx.org
 
@@ -26,7 +28,6 @@ BuildRequires:      zlib-devel
 Requires:           pcre
 Requires:           zlib
 Requires:           openssl
-Requires:           perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
 Requires(pre):      shadow-utils
 Requires(pre):      glibc-common
@@ -42,6 +43,8 @@ Source2:    https://github.com/GrayTShirt/specfiles/raw/master/extras/%{name}.in
             # https://github.com/kvspb/nginx-auth-ldap
             # curl https://codeload.github.com/kvspb/nginx-auth-ldap/tar.gz/master  -o ~/rpmbuild/SOURCES/nginx-auth-ldap-master.tar.gz
 Source3:    %{name}-auth-ldap-master.tar.gz
+            # https://github.com/vozlt/nginx-module-vts/archive/v0.1.14.tar.gz
+Source4:    %{name}-module-vts-%{_vts_version}.tar.gz
 Patch0:     %{name}-auth-ldap-master-pragma.patch
 
 
@@ -49,14 +52,13 @@ Patch0:     %{name}-auth-ldap-master-pragma.patch
 nginx [engine x] is an HTTP and reverse proxy server, as well as
 a mail proxy server.
 
-One third party module, ngx_http_push_stream has been added.
-
 
 %prep
 %setup -q
 %setup -T -D -a 1
 %setup -T -D -a 2
 %setup -T -D -a 3
+%setup -T -D -a 4
 %patch0 -p0
 
 
@@ -65,8 +67,8 @@ One third party module, ngx_http_push_stream has been added.
 	--prefix=%{_datadir}/%{name} \
 	--sbin-path=%{_sbindir}/%{name} \
 	--conf-path=/etc/nginx/nginx.conf \
-	--error-log-path=/var/log/nginx/error.log \
-	--http-log-path=/var/log/nginx/access.log \
+	--error-log-path=/var/log/%{name}error.log \
+	--http-log-path=/var/log/${name}/access.log \
 	--pid-path=/var/run/nginx.pid \
 	--lock-path=/var/run/nginx.lock \
 	--modules-path=%{_datadir}/%{name}/modules \
@@ -109,8 +111,9 @@ One third party module, ngx_http_push_stream has been added.
 	\
 	--with-http_geoip_module=dynamic \
 	--with-http_perl_module=dynamic \
-	--add-dynamic-module=%{_builddir}/nginx-%{version}/nginx-push-stream-module-%{_push_stream_version} \
-	--add-dynamic-module=%{_builddir}/nginx-%{version}/nginx-auth-ldap-master
+	--add-dynamic-module=%{_builddir}/%{name}-%{version}/%{name}-push-stream-module-%{_push_stream_version} \
+	--add-dynamic-module=%{_builddir}/%{name}-%{version}/%{name}-auth-ldap-master \
+	--add-dynamic-module=%{_builddir}/%{name}-%{version}/%{name}-module-vts-%{_vts_version}
 make %{?_smp_mflags}
 
 
@@ -123,6 +126,12 @@ find %{buildroot} -type f -name perllocal.pod -exec rm -f {} \;
 %{__install} -D -p -m 644 contrib/vim/indent/%{name}.vim   %{buildroot}%{_datadir}/vim/vimfiles/ident/%{name}.vim
 %{__install} -D -p -m 644 contrib/vim/syntax/%{name}.vim   %{buildroot}%{_datadir}/vim/vimfiles/syntax/%{name}.vim
 %{__install} -D -p -m 755 %{name}.initd %{buildroot}%{_initrddir}/%{name}
+%{__install} -D -d -p -m 755 %{buildroot}/var/log/%{name}
+%{__install} -D -d -p -m 755 %{buildroot}%{_cache_dir}/client_temp
+%{__install} -D -d -p -m 755 %{buildroot}%{_cache_dir}/proxy_temp
+%{__install} -D -d -p -m 755 %{buildroot}%{_cache_dir}/fastcgi_temp
+%{__install} -D -d -p -m 755 %{buildroot}%{_cache_dir}/uwsgi_temp
+%{__install} -D -d -p -m 755 %{buildroot}%{_cache_dir}/scgi_temp
 rm -f %{buildroot}%{_sysconfdir}/%{name}/koi-win
 rm -f %{buildroot}%{_sysconfdir}/%{name}/win-utf
 
@@ -181,10 +190,19 @@ fi
 %config %{_sysconfdir}/%{name}/mime.types.default
 %config %{_sysconfdir}/%{name}/uwsgi_params.default
 
+%defattr(-,%{_user},%{_user},-)
+%dir /var/log/%{name}
+%dir %{_cache_dir}/client_temp
+%dir %{_cache_dir}/proxy_temp
+%dir %{_cache_dir}/fastcgi_temp
+%dir %{_cache_dir}/uwsgi_temp
+%dir %{_cache_dir}/scgi_temp
 
 %package      module-perl
 Summary:      Dynamic Nginx Perl module
 Group:        System Environment/Daemons
+
+Requires:     perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
 %description  module-perl
 Dynamic Nginx Perl module
@@ -192,6 +210,7 @@ Dynamic Nginx Perl module
 %files        module-perl
 %defattr(-,root,root,-)
 %{perl_vendorarch}/%{name}.pm
+%{perl_vendorarch}/auto/%{name}/%{name}.bs
 %{perl_vendorarch}/auto/%{name}/%{name}.so
 
 %{_datadir}/%{name}/modules/ngx_http_perl_module.so
@@ -295,9 +314,20 @@ Dynamic Nginx Geo-Streaming module
 %{_datadir}/%{name}/modules/ngx_stream_geoip_module.so
 
 
-%changelog
-* Tue Nov  1 2016 Dan Molik <dan@d3fy.net> 1.11.5-1
-- Dynamic modules plus ldap-auth
+%package      module-vts
+Summary:      Nginx virtual host traffic status module
+Group:        System Environment/Daemons
 
-* Mon Feb 29 2016 Dan Molik <dan@d3fy.net> 1.9.12-1
-- Reimport with push_stream
+%description  module-vts
+Nginx virtual host traffic status module
+
+%files        module-vts
+%defattr(-,root,root,-)
+%{_datadir}/%{name}/modules/ngx_http_vhost_traffic_status_module.so
+
+
+%changelog
+* Fri Mar 31 2017 Dan Molik <dan@d3fy.net> 1.11.12-1
+- nginx 1.11.12
+  vts module
+  many other dynamic modoules
