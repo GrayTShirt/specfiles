@@ -102,6 +102,7 @@ fi
 %defattr(-,root,root,-)
 %doc CHANGELOG README doc/architecture.txt doc/configuration.txt doc/intro.txt doc/management.txt doc/proxy-protocol.txt
 %doc %{_mandir}/man1/%{name}.1*
+%doc %{_datadir}/vim/vimfiles/syntax/%{name}.vim
 
 %defattr(0755,root,root,0755)
 %{_sbindir}/%{name}
