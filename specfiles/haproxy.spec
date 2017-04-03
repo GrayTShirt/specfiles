@@ -67,6 +67,7 @@ rm -rf %{buildroot}
 %{__install} -d %{buildroot}%{_sysconfdir}/%{name}
 %{__install} -d %{buildroot}%{_mandir}/man1/
 
+%{__install} -D -p -m 644 examples/%{name}.vim %{buildroot}%{_datadir}/vim/vimfiles/syntax/%{name}.vim
 %{__install} -D -p -m 755 %{name}.initd %{buildroot}%{_initrddir}/%{name}
 %{__install} -c -m 755 doc/%{name}.1 %{buildroot}%{_mandir}/man1/
 
@@ -77,7 +78,7 @@ rm -rf %{buildroot}
 
 %pre
 getent group  %{_user} || groupadd -r %{_user}
-getent passwd %{_user} || useradd  -r -g %{_user} -c 'nginx daemon' -d %{_datadir}/%{name} -s /sbin/nologin %{_user}
+getent passwd %{_user} || useradd  -r -g %{_user} -c 'haproxy daemon' -d %{_datadir}/%{name} -s /sbin/nologin %{_user}
 
 
 %post
