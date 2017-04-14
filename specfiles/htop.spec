@@ -3,6 +3,7 @@ Summary:   Interactive process viewer
 Version:   2.0.2
 Release:   1%{?dist}
 License:   GPL
+Vendor:    Dan Molik <dan@danmolik.com>
 Group:     Applications/System
 URL:       http://htop.sourceforge.net/
 

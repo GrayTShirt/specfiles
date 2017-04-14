@@ -1,5 +1,6 @@
 Name:           hiredis
 Version:        0.13.3
+Vendor:         Dan Molik <dan@danmolik.com>
 %if %{?_release:1}0
 Release:        %{_release}%{?dist}
 %else

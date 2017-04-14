@@ -1,6 +1,7 @@
 Name:           google-authenticator
 Version:        1.01
 Release:        1%{?dist}
+Vendor:         Dan Molik <dan@danmolik.com>
 Summary:        One-time passcode support using open standards
 
 License:        ASL 2.0
