@@ -4,7 +4,7 @@
 %define _vts_version            0.1.14
 
 Name:           nginx
-Version:        1.12.0
+Version:        1.13.0
 Release:        1%{?dist}
 Summary:        High performance web server
 Group:          System Environment/Daemons
@@ -37,16 +37,19 @@ Requires(preun):    initscripts
 Requires(postun):   initscripts
 
 Source0:    http://%{name}.org/download/%{name}-%{version}.tar.gz
-            # https://github.com/wandenburg/nginx-push-stream-module
+            # https://github.com/wandenburg/nginx-push-stream-module/archive/master.tar.gz
 Source1:    %{name}-push-stream-module-%{_push_stream_version}.tar.gz
 Source2:    https://github.com/GrayTShirt/specfiles/raw/master/extras/%{name}.initd.tar.gz
-            # https://github.com/kvspb/nginx-auth-ldap
-            # curl https://codeload.github.com/kvspb/nginx-auth-ldap/tar.gz/master  -o ~/rpmbuild/SOURCES/nginx-auth-ldap-master.tar.gz
+            # https://github.com/kvspb/nginx-auth-ldap/archive/master.tar.gz
 Source3:    %{name}-auth-ldap-master.tar.gz
             # https://github.com/vozlt/nginx-module-vts/archive/v0.1.14.tar.gz
 Source4:    %{name}-module-vts-%{_vts_version}.tar.gz
-Patch0:     %{name}-auth-ldap-master-pragma.patch
+            # https://github.com/lusis/ngx_stream_upstream_check_module/archive/master.tar.gz
+Source5:    ngx_stream_upstream_check_module-master.tar.gz
+            # https://github.com/yaoweibin/nginx_upstream_check_module/archive/master.tar.gz
+Source6:    %{name}_upstream_check_module-master.tar.gz
 
+Patch0:     %{name}-auth-ldap-master-pragma.patch
 
 %description
 nginx [engine x] is an HTTP and reverse proxy server, as well as
@@ -59,10 +62,15 @@ a mail proxy server.
 %setup -T -D -a 2
 %setup -T -D -a 3
 %setup -T -D -a 4
+%setup -T -D -a 5
+%setup -T -D -a 6
 %patch0 -p0
 
-
 %build
+echo "Patching %{_builddir}/%{name}-%{version}/%{name}_upstream_check_module-master/check_1.11.5+.patch"
+patch -p0 < %{_builddir}/%{name}-%{version}/%{name}_upstream_check_module-master/check_1.11.5+.patch
+#echo "Patching %{_builddir}/%{name}-%{version}/ngx_stream_upstream_check_module-master/patch-1.11.x.patch"
+#patch -p0 < %{_builddir}/%{name}-%{version}/ngx_stream_upstream_check_module-master/patch-1.11.x.patch
 ./configure \
 	--prefix=%{_datadir}/%{name} \
 	--sbin-path=%{_sbindir}/%{name} \
@@ -113,7 +121,9 @@ a mail proxy server.
 	--with-http_perl_module=dynamic \
 	--add-dynamic-module=%{_builddir}/%{name}-%{version}/%{name}-push-stream-module-%{_push_stream_version} \
 	--add-dynamic-module=%{_builddir}/%{name}-%{version}/%{name}-auth-ldap-master \
+	--add-module=%{_builddir}/%{name}-%{version}/%{name}_upstream_check_module-master \
 	--add-dynamic-module=%{_builddir}/%{name}-%{version}/%{name}-module-vts-%{_vts_version}
+	# --add-dynamic-module=%{_builddir}/%{name}-%{version}/ngx_stream_upstream_check_module-master \
 make %{?_smp_mflags}
 
 
@@ -198,130 +208,108 @@ fi
 %dir %{_cache_dir}/uwsgi_temp
 %dir %{_cache_dir}/scgi_temp
 
-%package      module-perl
+
+%package      perl
 Summary:      Dynamic Nginx Perl module
 Group:        System Environment/Daemons
-
 Requires:     perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-
-%description  module-perl
+%description  perl
 Dynamic Nginx Perl module
-
-%files        module-perl
+%files        perl
 %defattr(-,root,root,-)
 %{perl_vendorarch}/%{name}.pm
 %{perl_vendorarch}/auto/%{name}/%{name}.bs
 %{perl_vendorarch}/auto/%{name}/%{name}.so
-
 %{_datadir}/%{name}/modules/ngx_http_perl_module.so
-
 %doc %{_mandir}/man3/%{name}.3pm.gz
 
 
-%package      module-auth-ldap
+%package      ldap
 Summary:      Dynamic Nginx ldap module
 Group:        System Environment/Daemons
-
-%description  module-auth-ldap
+%description  ldap
 Dynamic Nginx ldap module
-
-%files        module-auth-ldap
+%files        ldap
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_http_auth_ldap_module.so
 
 
-%package      module-geoip
+%package      geoip
 Summary:      Dynamic Nginx GeoIP module
 Group:        System Environment/Daemons
-
-%description  module-geoip
+%description  geoip
 Dynamic Nginx GeoIP module
-
-%files        module-geoip
+%files        geoip
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_http_geoip_module.so
 
 
-%package      module-image-filter
+%package      image-filter
 Summary:      Dynamic Nginx image filter module
 Group:        System Environment/Daemons
-
-%description  module-image-filter
+%description  image-filter
 Dynamic Nginx image filter module
-
-%files        module-image-filter
+%files        image-filter
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_http_image_filter_module.so
 
 
-%package      module-push-stream
+%package      push-stream
 Summary:      Dynamic Nginx Push Stream module
 Group:        System Environment/Daemons
-
-%description  module-push-stream
+%description  push-stream
 Wandenburg's Dynamic Nginx Push Stream module
-
-%files        module-push-stream
+%files        push-stream
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_http_push_stream_module.so
 
 
-%package      module-xslt
+%package      xslt
 Summary:      Dynamic Nginx xslt module
 Group:        System Environment/Daemons
-
-%description  module-xslt
+%description  xslt
 Dynamic Nginx XSLT module
-
-%files        module-xslt
+%files        xslt
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_http_xslt_filter_module.so
 
 
-%package      module-mail
+%package      mail
 Summary:      Dynamic Nginx email module
 Group:        System Environment/Daemons
-
-%description  module-mail
+%description  mail
 Dynamic Nginx email module
-
-%files        module-mail
+%files        mail
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_mail_module.so
 
 
-%package      module-stream
+%package      stream
 Summary:      Dynamic Nginx Streaming module
 Group:        System Environment/Daemons
-
-%description  module-stream
+%description  stream
 Dynamic Nginx Streaming module
-
-%files        module-stream
+%files        stream
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_stream_module.so
 
 
-%package      module-stream-geoip
+%package      stream-geoip
 Summary:      Dynamic Nginx Geo-Streaming nmodule
 Group:        System Environment/Daemons
-
-%description  module-stream-geoip
+%description  stream-geoip
 Dynamic Nginx Geo-Streaming module
-
-%files        module-stream-geoip
+%files        stream-geoip
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_stream_geoip_module.so
 
 
-%package      module-vts
+%package      vts
 Summary:      Nginx virtual host traffic status module
 Group:        System Environment/Daemons
-
-%description  module-vts
+%description  vts
 Nginx virtual host traffic status module
-
-%files        module-vts
+%files        vts
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/modules/ngx_http_vhost_traffic_status_module.so
 
