@@ -1,7 +1,7 @@
 %define _user   haproxy
 
 Name:           haproxy
-Version:        1.7.5
+Version:        1.7.8
 Release:        1%{?dist}
 Summary:        HA-Proxy is a TCP/HTTP reverse proxy for high availability environments
 Group:          System Environment/Daemons

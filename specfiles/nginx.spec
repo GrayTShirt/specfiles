@@ -4,7 +4,7 @@
 %define _vts_version            0.1.14
 
 Name:           nginx
-Version:        1.13.0
+Version:        1.13.4
 Release:        1%{?dist}
 Summary:        High performance web server
 Group:          System Environment/Daemons
